@@ -3,7 +3,7 @@ import { ApiError } from "../utils/apiError.js";
 
 const registerUser = asyncHandler(async(req , res)=>{
     res.status(200).json({
-        message : "ok"
+        message : "Atharv"
     })
     // get user details from frontend
     // validate them - not empty
