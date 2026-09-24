@@ -5,9 +5,10 @@ import {uploadOnCloudinary} from "../utils/Cloudinary.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 
 const registerUser = asyncHandler(async(req , res)=>{
-    res.status(200).json({
-        message : "Atharv"
-    })
+    // res.status(200).json({
+    //     message : "Atharv"
+    // })
+
     // get user details from frontend
     // validate them - not empty
     // cheak all the fields
@@ -18,25 +19,25 @@ const registerUser = asyncHandler(async(req , res)=>{
     // remove password and refresh tokens field from response
     // cheak for user creation
     // return res
-    const {fullname, username, email,password} = req.body;
+    const {fullName, username, email,password} = req.body;
     console.log("email : ", email);
 
     // NOW WE HAVE TO CHEAK THAT ARE THE ALL FIELDS EMPTY..?
     // we can also do it one by one by applying if on everyone but we will use array and use some method insted of map
 
-    if([fullname, username, email, password].some((field)=>
+    if([fullName, username, email, password].some((field)=>
     field?.trim() === "")){
         throw new ApiError(400, "All fields are compulsary !!!");
     }
 
-   const existedUser = User.findOne({
+   const existedUser =  await User.findOne({
         $or : [{username}, {email}]
     })
     if(existedUser){
         throw new ApiError(409,"User with this email and username already exist !");
     }
 
-    const avatarLocalPath = req.files?.avatar[0]?.path;
+    const avatarLocalPath =  req.files?.avatar[0]?.path;
     const coverImageLocalPath = req.files?.coverImage[0]?.path;
 
     if(!avatarLocalPath){
@@ -56,7 +57,7 @@ const registerUser = asyncHandler(async(req , res)=>{
          email,
          avatar: avatar.url,
          coverImage: coverImage?.url || "",
-         fullname
+         fullName
     })
 
     const createdUser = await User.findById(user._id).select(
